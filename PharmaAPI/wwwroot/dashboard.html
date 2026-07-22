@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pharma Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>💊 Pharma System</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="companies.html">Companies</a>
+    <a href="medicines.html">Medicines</a>
+    <a href="distributors.html">Distributors</a>
+    <a href="expiry.html">Expiry Alerts</a>
+</div>
+
+<div class="main">
+    <h1>Dashboard Analytics</h1>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Companies</h3>
+            <p id="companyCount">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Medicines</h3>
+            <p id="medicineCount">0</p>
+        </div>
+
+        <div class="card danger">
+            <h3>Expiring Soon</h3>
+            <p id="expiryCount">0</p>
+        </div>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js">
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+    window.location.href="index.html";
+}
+
+document.getElementById("welcome").innerText =
+    "Welcome " + user.role + " (" + user.companyId + ")";
+
+if(user.role !== "Admin"){
+    document.getElementById("adminSection").style.display="none";
+}
+</script>
+</body>
+</html>

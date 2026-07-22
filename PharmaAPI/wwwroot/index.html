@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharma Enterprise System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#0f172a,#1e40af);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card {
+    background:white;
+    width:420px;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+}
+
+.card h2 {
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input, select {
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button {
+    width:100%;
+    padding:12px;
+    background:#2563eb;
+    border:none;
+    color:white;
+    font-weight:bold;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover {
+    background:#1e3a8a;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Pharma Login</h2>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<select id="companyId">
+    <option value="1">Company 1</option>
+    <option value="2">Company 2</option>
+</select>
+
+<select id="role">
+    <option value="Admin">Admin</option>
+    <option value="CompanyAdmin">Company Admin</option>
+    <option value="SalesRep">Sales Rep</option>
+    <option value="Distributor">Distributor</option>
+</select>
+
+<button onclick="login()">Login</button>
+</div>
+
+<script>
+const API = "https://localhost:7259/api";
+
+async function login() {
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const companyId = document.getElementById("companyId").value;
+    const role = document.getElementById("role").value;
+
+    const response = await fetch(`${API}/Auth/login`,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json"},
+        body: JSON.stringify({
+            email:email,
+            password:password,
+            companyId:parseInt(companyId),
+            role:role
+        })
+    });
+
+    if(response.ok){
+        const user = await response.json();
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+        window.location.href="dashboard.html";
+    }
+    else{
+        alert("Invalid login");
+    }
+}
+</script>
+
+</body>
+</html>

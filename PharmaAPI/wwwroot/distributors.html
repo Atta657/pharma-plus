@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distributors</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>💊 Pharma Panel</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="medicines.html">Medicines</a>
+    <a href="distributors.html" class="active">Distributors</a>
+    <a href="expiry.html">Expiry Alerts</a>
+    <a href="index.html">Logout</a>
+</div>
+
+<div class="main">
+    <h1>Distributor Management</h1>
+
+    <!-- Admin Only Section -->
+    <div id="adminSection">
+        <div class="form">
+            <input type="text" id="distributorId" placeholder="Distributor ID">
+            <button onclick="loadDistributorInventory()">View Inventory</button>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTable"></tbody>
+    </table>
+</div>
+
+<script>
+const API = "https://localhost:7259/api";
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+    window.location.href="index.html";
+}
+
+// Hide admin section for non-admin users
+if(user.role !== "Admin"){
+    document.getElementById("adminSection").style.display = "none";
+}
+
+async function loadDistributorInventory(){
+
+    let distributorId;
+
+    if(user.role === "Distributor"){
+        distributorId = user.id; // assuming backend returns id
+    } else {
+        distributorId = document.getElementById("distributorId").value;
+    }
+
+    const response = await fetch(`${API}/Inventory/distributor/${distributorId}`);
+    const data = await response.json();
+
+    const table = document.getElementById("inventoryTable");
+    table.innerHTML = "";
+
+    data.forEach(item=>{
+        table.innerHTML += `
+            <tr>
+                <td>${item.medicineName}</td>
+                <td>${item.quantity}</td>
+            </tr>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

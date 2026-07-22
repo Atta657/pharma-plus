@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Companies</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>💊 Pharma System</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="companies.html" class="active">Companies</a>
+    <a href="medicines.html">Medicines</a>
+    <a href="distributors.html">Distributors</a>
+    <a href="expiry.html">Expiry Alerts</a>
+</div>
+
+<div class="main">
+    <h1>Companies Management</h1>
+
+    <div class="form">
+        <input type="text" id="companyName" placeholder="Enter Company Name">
+        <button onclick="addCompany()">Add Company</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Company Name</th>
+            </tr>
+        </thead>
+        <tbody id="companyTable"></tbody>
+    </table>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/companies.js"></script>
+</body>
+</html>

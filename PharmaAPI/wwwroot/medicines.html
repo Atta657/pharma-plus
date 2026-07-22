@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicines Inventory</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>💊 Pharma System</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="companies.html">Companies</a>
+    <a href="medicines.html" class="active">Medicines</a>
+    <a href="distributors.html">Distributors</a>
+    <a href="expiry.html">Expiry Alerts</a>
+</div>
+
+<div class="main">
+    <h1>Medicines Inventory (With Expiry Tracking)</h1>
+
+    <div class="form">
+        <input type="text" id="name" placeholder="Medicine Name">
+        <input type="number" id="quantity" placeholder="Quantity">
+        <input type="date" id="expiryDate">
+        <input type="number" id="companyId" placeholder="Company ID">
+        <button onclick="addMedicine()">Add Medicine</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+            </tr>
+        </thead>
+        <tbody id="medicineTable"></tbody>
+    </table>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/medicines.js">
+const user = JSON.parse(localStorage.getItem("user"));
+
+fetch(`${API}/Medicine/company/${user.companyId}`)
+</script>
+</body>
+</html>

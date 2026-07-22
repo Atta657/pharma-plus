@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expiry Alerts</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>💊 Pharma Panel</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="medicines.html">Medicines</a>
+    <a href="distributors.html">Distributors</a>
+    <a href="expiry.html" class="active">Expiry Alerts</a>
+    <a href="index.html">Logout</a>
+</div>
+
+<div class="main">
+    <h1>AI Expiry Monitoring</h1>
+
+    <div class="form">
+        <input type="number" id="days" placeholder="Enter days (e.g 30)">
+        <button onclick="loadExpiry()">Check Expiring Medicines</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Company</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="expiryTable"></tbody>
+    </table>
+</div>
+
+<script>
+const API = "https://localhost:7259/api";
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+    window.location.href="index.html";
+}
+
+async function loadExpiry(){
+
+    const days = document.getElementById("days").value;
+
+    const response = await fetch(`${API}/Medicine/expiring/${days}`);
+    const data = await response.json();
+
+    const table = document.getElementById("expiryTable");
+    table.innerHTML = "";
+
+    data.forEach(med=>{
+
+        let status = "Safe";
+        const today = new Date();
+        const expiry = new Date(med.expiryDate);
+        const diff = (expiry - today) / (1000*60*60*24);
+
+        if(diff <= 0){
+            status = "EXPIRED ❌";
+        } else if(diff <= 7){
+            status = "Critical ⚠️";
+        } else {
+            status = "Expiring Soon";
+        }
+
+        table.innerHTML += `
+            <tr>
+                <td>${med.name}</td>
+                <td>${med.companyId}</td>
+                <td>${med.expiryDate.split("T")[0]}</td>
+                <td style="font-weight:bold;color:red;">${status}</td>
+            </tr>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>
